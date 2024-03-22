@@ -53,11 +53,13 @@ class TypingConfigirationBarController extends GetxController {
         typingModeOptions[i]['isSelected'] = true;
         if (typingModeOptions[i]['name'] == 'words') {
           isWordsSelected = true;
+          resetWords();
         }
       } else {
         typingModeOptions[i]['isSelected'] = false;
         if (typingModeOptions[i]['name'] == 'words') {
           isWordsSelected = false;
+          resetTime();
         }
         updateCurrentTimePeriod();
         updateCurrentWordsNumber();
@@ -177,7 +179,7 @@ class TypingConfigirationBarController extends GetxController {
   }
 
   void keepTrackWords(String newValue){
-
+    textToTypeScrollController.jumpTo(typedTextScrollController.offset);
     if (newValue.isNotEmpty && !startTyping) {
       startTime = DateTime.now();
       startTyping = true;
@@ -206,6 +208,7 @@ class TypingConfigirationBarController extends GetxController {
   }
 
   void keepTrackTime(String newValue){
+    textToTypeScrollController.jumpTo(typedTextScrollController.offset);
     if (newValue.isNotEmpty && !startTyping) {
       startTime = DateTime.now();
       startTyping = true;
@@ -265,15 +268,14 @@ class TypingConfigirationBarController extends GetxController {
   }
 
   
+  final key = GlobalKey();
   @override
   void onInit() {
     updateCurrentWordsNumber();
     updateCurrentTimePeriod();
     generateRandomText(wordsNumber);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      typedTextScrollController.addListener(() {
-        textToTypeScrollController.jumpTo(typedTextScrollController.position.pixels);
-      });
+    typedTextScrollController.addListener(() {
+      textToTypeScrollController.jumpTo(typedTextScrollController.offset);
     });
     super.onInit();
   }
