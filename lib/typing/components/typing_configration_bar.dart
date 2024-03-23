@@ -12,7 +12,6 @@ class TypingConfigirationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final typingConfigirationBarController = Get.put(TypingConfigirationBarController());
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -26,12 +25,12 @@ class TypingConfigirationBar extends StatelessWidget {
             return Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TypingMode(typingConfigirationBarController: typingConfigirationBarController),
+                TypingMode(typingConfigirationBarController: typingController),
                 devider(),
-                if (typingConfigirationBarController.isWordsSelected) 
-                  ChooseWordsNumber(typingConfigirationBarController: typingConfigirationBarController) 
-                else 
-                  ChooseTimePeriod(typingConfigirationBarController: typingConfigirationBarController),
+                if (typingController.isWordsSelected) 
+                  ChooseWordsNumber(typingConfigirationBarController: typingController) 
+                else
+                  ChooseTimePeriod(typingConfigirationBarController: typingController),
               ],
             );
           }
