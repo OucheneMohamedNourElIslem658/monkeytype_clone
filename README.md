@@ -10,4 +10,4 @@ Tips :
   the import paths are relative so If you want to use directly the code you can just replace the provided code folders in your project and run 'flutter pub get' and you are ready to go.
   to use the app directly you can install the build directory and navigae to '\build\windows\x64\runner\Release' directory where you will find the .exe file.
 
-website URL : https://ouchenemohamednourelislem.web.app/
+demonstration video link: [https://drive.google.com/file/d/1AAjxHhUSoJT_DV5lJTXDzJGmc3sDG0GP/view?usp=sharing]
