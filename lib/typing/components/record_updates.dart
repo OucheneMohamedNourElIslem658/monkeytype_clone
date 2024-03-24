@@ -59,7 +59,7 @@ class RecordUpdates extends StatelessWidget {
                 final leftTime = typingController.timePeriod - period;
                 if (leftTime <= 0) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    typingController.goToRecord();
+                    typingController.gameOver();
                   });
                 }
                 return Text(

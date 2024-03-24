@@ -195,17 +195,6 @@ class TypingConfigirationBarController extends GetxController {
     }
   }
 
-  void keepTrackTime(String newValue){
-    updateRealTimeStatistics(newValue);
-    if (newValue.length == textToType.length-2) {
-      gameOver();
-    } else {
-      typedCaractersNumber ++;
-      typedText = newValue;
-      update();
-    }
-  }
-
   void goToRecord() {
     final int timeDifference;
     if (isWordsSelected) {
@@ -290,6 +279,8 @@ class TypingConfigirationBarController extends GetxController {
     }
     calculateStatistics();
     goToRecord();
+    resetTime();
+    resetWords();
   }
 
   void calculateWPM(){

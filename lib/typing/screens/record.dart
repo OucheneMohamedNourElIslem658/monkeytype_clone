@@ -1,10 +1,14 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 
+import '../../storage/controllers/histories.dart';
+import '../../storage/models/history.dart';
+import '../components/statistic_items.dart';
+import '../components/typing_charts.dart';
+
+// ignore: must_be_immutable
 class Record extends StatelessWidget {
-  const Record({
+  Record({
     super.key, 
     required this.wpm, 
     required this.acc, 
@@ -18,17 +22,45 @@ class Record extends StatelessWidget {
     required this.when, 
     required this.extraCaracter, 
     required this.correctCaracters, 
-    required this.mistakes
+    required this.mistakes,
+    this.showSaveButton = true
   });
 
   final int wpm,acc,consistency,takenTime,extraCaracter,correctCaracters,mistakes;
   final String review,comparision,testType;
   final List<int> correctAnsswersEverySecond,mistakesEverySecond;
   final DateTime when;
+  final bool showSaveButton;
+
+  var historiesController = Get.put(HistoriesController());
+
+  void addRecord() async {
+    try {
+      await historiesController.addHistory(History(
+        wpm: wpm,
+        acc: acc,
+        consistency: consistency,
+        takenTime: takenTime,
+        review: review,
+        comparision: comparision,
+        testType: testType,
+        correctAnsswersEverySecond: correctAnsswersEverySecond,
+        mistakesEverySecond: mistakesEverySecond,
+        when: when,
+        extraCaracter: extraCaracter,
+        correctCaracters: correctCaracters,
+        mistakes: mistakes
+      ));
+      Get.snackbar('Success', 'Record added successfully');
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to add record');
+    }
+  }
 
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
@@ -48,6 +80,35 @@ class Record extends StatelessWidget {
             fontWeight: FontWeight.w600
           ),
         ),
+        actions: showSaveButton 
+        ? [
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: ElevatedButton(
+              onPressed: () => addRecord(), 
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)
+                ),
+                backgroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 16)
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.save,color: Colors.black,),
+                  SizedBox(width: 10),
+                  Text(
+                    'save record',
+                    style: TextStyle(
+                      color: Colors.black,
+                    )
+                  )
+                ],
+              )
+            ),
+          )
+        ]
+        : [],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -117,130 +178,4 @@ class Record extends StatelessWidget {
     color: Colors.black,
     margin: const EdgeInsets.symmetric(horizontal: 40),
   );
-}
-
-class StatisticItem extends StatelessWidget {
-  const StatisticItem({
-    super.key,
-    required this.value,
-    required this.title, 
-    this.titleSize, 
-    this.valueSize
-  });
-
-  final String value,title;
-  final double? titleSize,valueSize;
-  
-
-  @override
-  Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-        children: [
-          TextSpan(
-            text: '$title\n',
-            style: TextStyle(
-              fontSize: titleSize ?? 30,
-              color: Colors.grey[300]
-            )
-          ),
-          TextSpan(
-            text: value,
-            style: TextStyle(
-              fontSize: valueSize ?? 50,
-              color: Colors.yellow,
-              fontWeight: FontWeight.w600
-            )
-          )
-        ]
-      )
-    );
-  }
-}
-
-class TypingCharts extends StatelessWidget {
-  const TypingCharts({
-    super.key, 
-    required this.correctAnsswersEverySecond, 
-    required this.mistakesEverySecond
-  });
-
-  final List<int> correctAnsswersEverySecond,mistakesEverySecond;
-
-  @override
-  Widget build(BuildContext context) {
-    return LineChart(
-      LineChartData(
-        borderData: FlBorderData(
-          show: true,
-          border: const Border(
-            top: BorderSide(color: Colors.transparent),
-            right: BorderSide(color: Colors.transparent),
-            left: BorderSide(color: Colors.black),
-            bottom: BorderSide(color: Colors.black),
-          )
-        ),
-        titlesData: const FlTitlesData(
-          topTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: false
-            ),
-          ),
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              interval: 3
-            )
-          ),
-          rightTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: false,
-            ),
-          ),
-        ),
-        lineTouchData: const LineTouchData(
-          touchTooltipData: LineTouchTooltipData(
-            tooltipBgColor: Colors.transparent,
-          )
-            
-        ),
-        lineBarsData: [
-          LineChartBarData(
-            color: const Color.fromARGB(255, 68, 68, 68),
-            isCurved: true,
-            spots: List.generate(
-              correctAnsswersEverySecond.length, 
-              (index) => FlSpot(
-                index *3, 
-                correctAnsswersEverySecond[index].toDouble()
-              )
-            ),
-            dotData: FlDotData(
-              getDotPainter: (p0, p1, p2, p3) => FlDotCirclePainter(
-                radius: 5,
-                color: Colors.black
-              )
-            ),
-          ),
-          LineChartBarData(
-            isCurved: true,
-            barWidth: 0,
-            dotData: FlDotData(
-              getDotPainter: (p0, p1, p2, p3) => FlDotCirclePainter(
-                radius: 5,
-                color: Colors.red
-              )
-            ),
-            spots: List.generate(
-              mistakesEverySecond.length, 
-              (index) => FlSpot(
-                index * 3, 
-                mistakesEverySecond[index].toDouble()
-              )
-            )
-          )
-        ]
-      )
-    );
-  }
 }

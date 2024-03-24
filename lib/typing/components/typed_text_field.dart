@@ -26,13 +26,7 @@ class TypedTextField extends StatelessWidget {
       controller: typingController.controller,
       scrollController: typingController.typedTextScrollController,
       focusNode: typingController.typedTextFocusNode,
-      onChanged: (value) {
-        if (typingController.isWordsSelected) {
-          typingController.keepTrackWords(value);
-        } else {
-          typingController.keepTrackTime(value);
-        }
-      },
+      onChanged: (value) => typingController.keepTrackWords(value),
       decoration: const InputDecoration(
         focusedBorder: InputBorder.none,
         enabledBorder: InputBorder.none,
