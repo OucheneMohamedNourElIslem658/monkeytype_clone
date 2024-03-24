@@ -1,0 +1,10 @@
+^M:\DOCUMENTS\MY APPS\MONKEY_TYPE_CLONE\BUILD\WINDOWS\X64\CMAKEFILES\91AF69CFDBCBCB9F324CD7D237047EA2\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" "-SM:/Documents/my apps/monkey_type_clone/windows" "-BM:/Documents/my apps/monkey_type_clone/build/windows/x64" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "M:/Documents/my apps/monkey_type_clone/build/windows/x64/monkey_type_clone.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

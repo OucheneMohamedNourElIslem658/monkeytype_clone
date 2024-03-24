@@ -1,12 +1,11 @@
-import 'dart:io';
-
 import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../models/history.dart';
 
 class HistoriesRepository {
   Future<void> initHive() async {
-    final path = Directory.current.path;
+    final path = (await getDownloadsDirectory())!.path;
     Hive.init(path);
   }
 
